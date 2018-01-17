@@ -84,8 +84,19 @@ IP: 18.218.218.70.76 User: grader port: 2200
 	Sudo pip install requests
 	sudo apt-get -qqy install postgresql python-psycopg2
 	sudo python database_setup.py
-
-### 17.	Configure and enable new virtual host 
+	
+### 16. Log into __init__.py and hard code the paths to .json files
+	Sudo nano __init__.py
+	Find all .json files and input ‘/var/www/FlaskApp/FlaskApp/’
+	Save and Exit
+	
+### 17. Go to google api console, download JSON and update, client_secrets.json
+	Cd /var/www/FlaskApp/FlaskApp
+	Sudo nano client_secrets.json
+	Delete posting in there and past new from google.
+	Save and Exit.
+	
+### 18.	Configure and enable new virtual host 
 	Sudo nano /etc/apache2/sites-available/FlaskApp.conf
 	<VirtualHost *:80>
 	    ServerName 18.218.70.76
@@ -107,7 +118,7 @@ IP: 18.218.218.70.76 User: grader port: 2200
 
 	Enable VH, sudo a2ensite catalog
 	
-### 18. Create a catalog.wsgi file to serve the application over the mod_wsgi
+### 19. Create a catalog.wsgi file to serve the application over the mod_wsgi
 	go to the html folder: `$ cd /var/www/FlaskApp`
 	Edit the file: `$ sudo nano flaskapp.wsgi`
 	Insert these lines:
@@ -116,12 +127,12 @@ IP: 18.218.218.70.76 User: grader port: 2200
    	import logging
 	
    	logging.basicConfig(stream=sys.stderr)
-   	sys.path.insert(0, "/var/www/FlaskApp/")
+   	sys.path.insert(0, "/var/www/FlaskApp/FlaskApp")
 	
-   	from FlaskApp import app as application
+   	from __init__ import app as application
 	application.secret_key = 'super_secret_key'
 		
-### 19.	Restart Apache sudo service apache2 restart
+### 20.	Restart Apache sudo service apache2 restart
 
 ## REFERENCES
 	https://www.digitalocean.com/community/tutorials/how-to-deploy-a-flask-application-on-an-ubuntu-vps
