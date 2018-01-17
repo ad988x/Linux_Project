@@ -1,4 +1,4 @@
-IP: 18.218.218.70.76 User: grader port: 2200
+IP: 18.218.70.76 User: grader port: 2200
 
 ### 1.	installed packages
 	sudo apt-get update 
