@@ -125,6 +125,7 @@ IP: 18.218.218.70.76 User: grader port: 2200
 
 ## REFERENCES
 	https://www.digitalocean.com/community/tutorials/how-to-deploy-a-flask-application-on-an-ubuntu-vps
+ 	http://flask.pocoo.org/docs/0.12/patterns/packages/
 
 
 
