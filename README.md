@@ -1,4 +1,4 @@
-IP: 18.217.12.109 User: grader port: 2200
+IP: 18.218.218.70.76 User: grader port: 2200
 
 ### 1.	installed packages
 	sudo apt-get update 
@@ -43,20 +43,18 @@ IP: 18.217.12.109 User: grader port: 2200
 		(set the line start with PasswordAuthentication to no)
 	Sudo service ssh restart
 ### 10.	Configured Uncomplicated Firewall(UFW) to allow all incoming connections for SSH, HTP and N
-	Sudo ufw default deny incoming
-	Sudo ufw default allow outgoing
 	Sudo ufw allow 2200/tcp
 	sudo ufw allow 80/tcp	
-	Sudo ufw allow http
-	Sudo ufw allow ntp
+	Sudo ufw allow 123/udp
 	Sudo ufw enable
 ### 11.	 Local timezone to UTC
 	Sudo timedatectl set-timezone UTC
 ### 12.	 Install Apache Server Service
 	Sudo apt-get install apache2
+	Sudo service apache2 restart
 ### 13.	 Install mod_sgi
 	Sudo apt-get install libapache2-mod-wsgi python-dev
-	Sudo a2enmod wsgi
+	bSudo service apache2 restart
 ### 14.	Install and configure POSTGRESQL
 	Sudo apt-get install postgresql
 	No remote connections are allowed: sudo vim /etc/postgresql/9.3/main/pg_hba.conf
@@ -69,9 +67,12 @@ IP: 18.217.12.109 User: grader port: 2200
 	\q
 	exit
 ### 15.	 Clone git repo
-	Sudo mkdir /var/www/catalog
-	Cd /var/www/catalog
+	Cd /var/www
+	Sudo mkdir FlaskApp
+	Cd FlaskApp
 	Sudo git clone https://github.com/ad988x/Item_Catalog.git
+	Sudo mv ./Item_Catalog ./FlaskApp
+	cd FlaskApp
 	Edit:
 		Database_setup.py, project.py, soccer_team_populate_db.py 
 		create_engine('sqlite:///itemcatalogwithuser.db') to engine =  		create_engine('postgresql://catalog:password@localhost/catalog')
@@ -82,30 +83,19 @@ IP: 18.217.12.109 User: grader port: 2200
 	Sudo pip install requests
 	sudo apt-get -qqy install postgresql python-psycopg2
 	sudo python database_setup.py
-### 16.	Create a catalog.wsgi file to serve the application over the mod_wsgi
-	go to the html folder: `$ cd /var/www/html`
-	Create the file: `$ sudo touch catalog.wsgi`
-	Edit the file: `$ sudo nano catalog.wsgi`
-	Insert these lines:
-     	#!/usr/bin/python
-		import sys
-   	import logging
-   	logging.basicConfig(stream=sys.stderr)
-   	sys.path.insert(0, "/var/www/catalog/")
-   	from catalog import app as application
-		application.secret_key = 'super_secret_key'
+
 ### 17.	Configure and enable new virtual host 
-	Sudo nano /etc/apache2/sites-available/catalog.conf
-	<VirtualHost :80>
-	    ServerName 18.217.12.109
-	   ServerAdmin admin@18.217.12.109	    	    
-	    WSGIScriptAlias / /var/www/catalog.wsgi
-	    <Directory /var/www/catalog/>
+	Sudo nano /etc/apache2/sites-available/FlaskApp.conf
+	<VirtualHost *:80>
+	    ServerName 18.218.70.76
+	   ServerAdmin duzy2172@gmail.com	    	    
+	    WSGIScriptAlias / /var/www/FlaskApp/flaskapp.wsgi
+	    <Directory /var/www/FlaskApp/FlaskApp>
 	        Order allow,deny
 	        Allow from all
 	    </Directory>
-	    Alias /static /var/www/catalog/catalog/static
-	    <Directory /var/www/catalog/static/>
+	    Alias /static /var/www/FlaskApp/FlaskApp/static
+	    <Directory /var/www/FlaskApp/FlaskApp/static/>
 	        Order allow,deny
 	        Allow from all
    	</Directory>
@@ -113,9 +103,27 @@ IP: 18.217.12.109 User: grader port: 2200
 	    LogLevel warn
 	    CustomLog ${APACHE_LOG_DIR}/access.log combined
 	</VirtualHost>
+
 	Enable VH, sudo a2ensite catalog
-	Sudo service apache2 reload
-### 18.	Restart Apache sudo service apache2 restart
+	
+### 18. Create a catalog.wsgi file to serve the application over the mod_wsgi
+	go to the html folder: `$ cd /var/www/FlaskApp`
+	Edit the file: `$ sudo nano flaskapp.wsgi`
+	Insert these lines:
+     	#!/usr/bin/python
+	import sys
+   	import logging
+	
+   	logging.basicConfig(stream=sys.stderr)
+   	sys.path.insert(0, "/var/www/FlaskApp/")
+	
+   	from FlaskApp import app as application
+	application.secret_key = 'super_secret_key'
+		
+### 19.	Restart Apache sudo service apache2 restart
+
+## REFERENCES
+	https://www.digitalocean.com/community/tutorials/how-to-deploy-a-flask-application-on-an-ubuntu-vps
 
 
 
