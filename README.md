@@ -73,6 +73,7 @@ IP: 18.218.218.70.76 User: grader port: 2200
 	Sudo git clone https://github.com/ad988x/Item_Catalog.git
 	Sudo mv ./Item_Catalog ./FlaskApp
 	cd FlaskApp
+	Sudo mv project.py __init__.py
 	Edit:
 		Database_setup.py, project.py, soccer_team_populate_db.py 
 		create_engine('sqlite:///itemcatalogwithuser.db') to engine =  		create_engine('postgresql://catalog:password@localhost/catalog')
