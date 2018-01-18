@@ -4,6 +4,7 @@ IP: 18.218.70.76 User: grader port: 2200
 	sudo apt-get update 
 	sudo apt-get upgrade
 	sudo dpkg-reconfigure --priority=low unattended-upgrades
+	sudo apt-get dist-upgrade(if all packages get updated)
 ### 2.	install finger
 	sudo apt-get install finger
 ### 3.	Change the SSH Port from 22 to 2200
